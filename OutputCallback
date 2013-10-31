@@ -1,0 +1,17 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package crftotweets;
+import cc.mallet.types.Sequence;
+/**
+ *
+ * @author Zeynep Banu
+ */
+public interface OutputCallback 
+{
+  @SuppressWarnings("unchecked")
+  public void process(Sequence output);
+
+  void print();
+}
