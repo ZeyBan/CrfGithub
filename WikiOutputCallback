@@ -17,7 +17,6 @@ public class WikiOutputCallback implements OutputCallback {
 
           if (!output.get(i).equals("<ENAMEX_TYPE=\"O\">"))
           {
-              System.out.println(output.get(i));
               CRFSequenceLearner.resultSet.add(new ResultSet(CRFSequenceLearner.inputArrayDeneme[CRFSequenceLearner.outCount], ""+output.get(i)));
           }
           CRFSequenceLearner.outCount++;
@@ -31,8 +30,8 @@ public class WikiOutputCallback implements OutputCallback {
         for(ResultSet result:CRFSequenceLearner.resultSet)
         {
             StringBuffer buf = new StringBuffer();
-            buf.append(result.word+ " "+result.label);
-            //buf.append(result.word+ "\t\t"+result.label);
+            //buf.append(result.word+ " "+result.label);
+            buf.append(result.word+ "\t\t"+result.label);
             System.out.println(buf.toString());
         }
     }
