@@ -1,0 +1,21 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package crftotweets;
+
+/**
+ *
+ * @author Zeynep Banu
+ */
+public class ResultSet 
+{
+    public String word;
+    public String label;
+    public ResultSet(String word, String label) {
+        this.word = word;
+        this.label = label;
+    }
+
+
+}
