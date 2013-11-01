@@ -37,27 +37,26 @@ public class WikiLineGroupIterator implements Iterator<Instance>
         initialize(input, lineBoundaryRegex, skipBoundary) ;
     }
 
-    public WikiLineGroupIterator (File file, Pattern lineBoundaryRegex, boolean skipBoundary) throws IOException {
+    public WikiLineGroupIterator (File file, Pattern lineBoundaryRegex, boolean skipBoundary) throws IOException
+    {
         String str = FileUtils.readFileToString(file);
         initialize(str, lineBoundaryRegex, skipBoundary);
     }
     private void initialize(String input, Pattern lineBoundaryRegex, boolean skipBoundary)
     {
         CRFSequenceLearner.outCount = 0;
-        CRFSequenceLearner.resultSet= new ArrayList<>();
-        CRFSequenceLearner.inputArrayDeneme=input.split("\n");
-
+        CRFSequenceLearner.resultSet= new ArrayList<ResultSet>();
+        CRFSequenceLearner.inputArrayDeneme=input.replaceAll("\n\n","\n").split("\n");
         inputArray=input.split("\n");
-
        // CRFSequenceLearner.inputArray= new  String[input.split("\n").length][];
         this.lineBoundaryRegex = lineBoundaryRegex;
         this.skipBoundary = skipBoundary;
         setNextLineGroup();
     }
-    public String peekLineGroup () {
+    public String peekLineGroup ()
+    {
         return nextLineGroup;
     }
-
     private void setNextLineGroup ()
     {
         StringBuilder sb = new StringBuilder ();
@@ -65,31 +64,38 @@ public class WikiLineGroupIterator implements Iterator<Instance>
         int k=0;
         if (!skipBoundary && nextBoundary != null)
             sb.append(nextBoundary + '\n');
-        while(i<inputArray.length) {
-
-              line = inputArray[i];
+        while(i<inputArray.length)
+        {
+             line = inputArray[i];
               i++;
-            if (line == null) {
+            if (line == null)
+            {
                 break;
-            } else if (lineBoundaryRegex.matcher (line).matches()) {
-                if (sb.length() > 0) {
+            }
+            else if (lineBoundaryRegex.matcher (line).matches())
+            {
+                if (sb.length() > 0)
+                {
                     this.nextBoundary = this.nextNextBoundary;
                     this.nextNextBoundary = line;
                     break;
-                } else { // The first line of the file.
+                }
+                else
+                {
+                // The first line of the file.
                     if (!skipBoundary)
                     {
                         sb.append(line + '\n');
-
                         k++;
                     }
                     this.nextNextBoundary = line;
                 }
-            } else {
+            }
+            else
+            {
                 sb.append(line);
                 sb.append('\n');
                 k++;
-
             }
         }
       //  CRFSequenceLearner.inputArray[groupIndex]=sb.toString().split("\n");
@@ -97,10 +103,7 @@ public class WikiLineGroupIterator implements Iterator<Instance>
             this.nextLineGroup = null;
         else
             this.nextLineGroup = sb.toString();
-
     }
-
-
     public Instance next ()
     {
         assert (nextLineGroup != null);
@@ -109,10 +112,16 @@ public class WikiLineGroupIterator implements Iterator<Instance>
         setNextLineGroup ();
         return carrier;
     }
+    public boolean hasNext ()
+	{
+	return nextLineGroup != null;
+	}
 
-    public boolean hasNext ()	{	return nextLineGroup != null;	}
+    public void remove ()
+ {
 
-    public void remove () {
         throw new IllegalStateException ("This Iterator<Instance> does not support remove().");
+
     }
+
 }
