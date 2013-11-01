@@ -3,71 +3,87 @@
  * and open the template in the editor.
  */
 package crftotweets;
-import cc.mallet.pipe.*;
-import cc.mallet.pipe.tsf.*;
+import cc.mallet.pipe.Pipe;
+
+import cc.mallet.pipe.PrintInputAndTarget;
+
+import cc.mallet.pipe.TokenSequence2FeatureVectorSequence;
+
+import cc.mallet.pipe.tsf.OffsetConjunctions;
+
+import cc.mallet.pipe.tsf.RegexMatches;
+
 //import edu.yildiz.nlp.sequence.tagger.parsers.Wiki2TokenSequence;
 
+
 import java.util.regex.Pattern;
+
+
 /**
  *
  * @author Zeynep Banu
  */
-public class InfoFeatureFactory extends CompositeFeatureFactory {
+public class InfoFeatureFactory extends CompositeFeatureFactory 
+{
+    public void init() 
+	{
+        
+	_featurePipeline.rebuild();
 
-
-    public void init() {
-        _featurePipeline.rebuild();
         // convert strings to tokens
 
-    }
+    
+	}
 
-    public void build() {
+
+    public void build() 
+    {
         init();
         buildSpecific();
-
     }
-
-    public void buildSpecific(){
+    public void buildSpecific()
+    {
         _featurePipeline.addPipes(new Pipe [] {
         //Inputları alıp featureları ayırıyor.
         //new SimpleTaggerSentence2TokenSequence(),
          new Wiki2TokenSequence(),
-         new RegexMatches("SoruIsareti", Pattern.compile("\\?")),
-         new RegexMatches("SoruEki1", Pattern.compile("((\\s+[mM]+[ıIiİuUüÜ]+)(\\?|\\.|!|:|\\s|\\,)+)")),
-         new RegexMatches("SoruEki2", Pattern.compile("(([^ıiuüIİUÜaAeEoÖ][mM]+[ıIiİuUüÜ]*[sS]+[ıIiİuUüÜ]*[nN]+)(\\?|\\.|!|:|\\s|\\,)+)")),
-         new RegexMatches("SoruEki3", Pattern.compile("(([mM]+[ıIiİuUüÜ]*[sS]+[ıIiİuUüÜ]*[nN]+[ıIiİuUüÜ]*[zZ]+)(\\?|\\.|!|:|\\s|\\,)+)")),
-         new RegexMatches("SoruEki4", Pattern.compile("(([mM]+[ıIiİuUüÜ]*[yY]+[ıIiİuUüÜ]*[mMzZ]+)(\\?|\\.|!|:|\\s|\\,)+)")),
-         new RegexMatches("SoruEki5", Pattern.compile("(([mM]+[ıIiİuUüÜ]*[yY]+[dD]+[ıIiİuUüÜ]*[kKnN]+)(\\?|\\.|!|:|\\s|\\,)+)")),
-         new RegexMatches("SoruEki6", Pattern.compile("(([mM]+[ıIiİuUüÜ]*[yY]+[mM]+[ıIiİuUüÜ]*[sSşŞ]+)(\\?|\\.|!|:|\\s|\\,)+)")),
-         new RegexMatches("SoruEki7", Pattern.compile("(([mM]+[ıIiİuUüÜ]*[dD]+[ıIiİuUüÜ]*[rR]+)(\\?|\\.|!|:|\\s|\\,)+)")),
+         new RegexMatches("SoruIsareti", Pattern.compile(".*\\?.*")),
          
-         new RegexMatches("SoruKelimesi1", Pattern.compile("((\\s+[nN]+[iİıI]+[yY]+[eE]+))")),
-         new RegexMatches("SoruKelimesi2", Pattern.compile("((\\s+[kK]+[aA]+[cCçÇ]+))")),
-         new RegexMatches("SoruKelimesi3", Pattern.compile("((\\s+[nN]+[eE]+[rR]+[dD]?[eE]+))")),
-         new RegexMatches("SoruKelimesi4", Pattern.compile("((\\s+[nN]+[eE]+[lL]+[eE]*[rR]+))")),
-         new RegexMatches("SoruKelimesi5", Pattern.compile("((\\s+[hH]+[aA]+[nN]+[gG]+[iİ]+))")),
-         new RegexMatches("SoruKelimesi6", Pattern.compile("((\\s+[nN]+[eE]+[dD]+[iİ]*[rR]+))")),
-         new RegexMatches("SoruKelimesi7", Pattern.compile("((\\s+[kK]+[iİıI]+[mM]+\\s?)([^bi|Bİ| bi| Bİ]))")),
-         new RegexMatches("SoruKelimesi8", Pattern.compile("((\\s+[nN]+[eE]+[yY]+))")),
-         new RegexMatches("SoruKelimesi9", Pattern.compile("((\\s+[nN]+[aA]+[sS]+[iİıI]+[lL]+))")),
-         new RegexMatches("SoruKelimesi10", Pattern.compile("((\\s+[nN]+[eE]+[dD]+[eE]+[nN]+))")),        
-         new RegexMatches("SoruKelimesi11", Pattern.compile("((\\s+[nN]+[oO]+[lL]+[mM]+[uU]+[şŞsS]+))")),
-         new RegexMatches("SoruKelimesi12", Pattern.compile("((\\s+[nN]+[oO]+[lL]+[dD]+[uU]+))")),
-         new RegexMatches("SoruKelimesi13", Pattern.compile("((\\s+[nN]+[eE]+[sS]+[iİıI]+[nN]+))")),
-         new RegexMatches("SoruKelimesi14", Pattern.compile("((\\s+[nN]+[aA]+[pPbB]+[iİıI]*[yY]+[oO]*))")),
-         new RegexMatches("SoruKelimesi15", Pattern.compile("((\\s+[nN]+[iİıI]+[çÇcC]+[iİıI]+[nN])(\\?|\\.|!|:|\\s)+)")),
-         new RegexMatches("SoruKelimesi16", Pattern.compile("((\\s+[nN]+[aA]+[bB]+[eE]*[rR]+))")),
-         new RegexMatches("SoruKelimesi17", Pattern.compile("((\\,|\\.|!|:|\\s)+)([nN]+[eE]+)(\\s+)")),
-         new RegexMatches("SoruKelimesi18", Pattern.compile("((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([oO]+[lL]+[dD]+[uU]+)|([dD]+[iİıI]+[yY]+[oOeE]+)|([bB]+[uU]+))")),
-         new RegexMatches("SoruKelimesi19", Pattern.compile("((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([zZ]+[aA]+[mM]+[aA]+[nN]+)|([iİıI]+[şŞ]+)|([kK]+[aA]+[lL]+[iİıI]+[rR]+)|([dD]+[eE]+))")),
-         new RegexMatches("SoruKelimesi20", Pattern.compile("((\\,|\\.|!|:|\\s|([bB]+[uU]+\\s?))+)([nN]+[eE]+)(([iİıI]+[cCçÇ]+[iİıI]+[nN]+)|([pP]+[eE]+[kK]+[iİıI]+)|([lL]+[aA]+))")),         
-         new RegexMatches("SoruKelimesi21", Pattern.compile("((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([aA]+[lL]+[aA]+[kK]+[aA]+)|([aA]+[yY]+[aA]+[kK]+)|([kK]+[aA]+[dD]+[aA]+[rR]+))")),
-         new RegexMatches("SoruKelimesi22", Pattern.compile("((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([aA]+[rR]+[aA]+)|([Ll][İiIı]+)|([Cc][İiIı]+)|([sS][İiIı]+))")),
-         new RegexMatches("SoruKelimesi23", Pattern.compile("((\\s+[nN]+[eE]+)(\\?|\\.|!|:))")),
-         new RegexMatches("SoruKelimesi24", Pattern.compile("((\\s+[nN]+[eE]+)$)")),
-         new RegexMatches("SoruKelimesi25", Pattern.compile("((\\s+[nN]+[eE]+\\s+[^ yazik| yazık| YAZIK| YAZİK]))")),
-         new RegexMatches("SoruKelimesi26", Pattern.compile("(([nN]+[aA]*[pPbB]+[tTdD]+[iİıI]+))")),
-         
+         new RegexMatches("SoruEki1", Pattern.compile(".*((\\s+[mM]+[ıIiİuUüÜ]+)(\\?|\\.|!|:|\\s|\\,)+).*")),
+         new RegexMatches("SoruEki2", Pattern.compile(".*(([^ıiuüIİUÜaAeEoÖ][mM]+[ıIiİuUüÜ]*[sS]+[ıIiİuUüÜ]*[nN]+)(\\?|\\.|!|:|\\s|\\,)+).*")),
+         new RegexMatches("SoruEki3", Pattern.compile(".*(([mM]+[ıIiİuUüÜ]*[sS]+[ıIiİuUüÜ]*[nN]+[ıIiİuUüÜ]*[zZ]+)(\\?|\\.|!|:|\\s|\\,)+).*")),
+         new RegexMatches("SoruEki4", Pattern.compile(".*(([mM]+[ıIiİuUüÜ]*[yY]+[ıIiİuUüÜ]*[mMzZ]+)(\\?|\\.|!|:|\\s|\\,)+).*")),
+         new RegexMatches("SoruEki5", Pattern.compile(".*(([mM]+[ıIiİuUüÜ]*[yY]+[dD]+[ıIiİuUüÜ]*[kKnN]+)(\\?|\\.|!|:|\\s|\\,)+).*")),
+         new RegexMatches("SoruEki6", Pattern.compile(".*(([mM]+[ıIiİuUüÜ]*[yY]+[mM]+[ıIiİuUüÜ]*[sSşŞ]+)(\\?|\\.|!|:|\\s|\\,)+).*")),
+         new RegexMatches("SoruEki7", Pattern.compile(".*(([mM]+[ıIiİuUüÜ]*[dD]+[ıIiİuUüÜ]*[rR]+)(\\?|\\.|!|:|\\s|\\,)+).*")),
+
+         new RegexMatches("SoruKelimesi1", Pattern.compile(".*((\\s+[nN]+[iİıI]+[yY]+[eE]+)).*")),
+         new RegexMatches("SoruKelimesi2", Pattern.compile(".*((\\s+[kK]+[aA]+[cCçÇ]+)).*")),
+         new RegexMatches("SoruKelimesi3", Pattern.compile(".*((\\s+[nN]+[eE]+[rR]+[dD]?[eE]+)).*")),
+         new RegexMatches("SoruKelimesi4", Pattern.compile(".*((\\s+[nN]+[eE]+[lL]+[eE]*[rR]+)).*")),
+         new RegexMatches("SoruKelimesi5", Pattern.compile(".*((\\s+[hH]+[aA]+[nN]+[gG]+[iİ]+)).*")),
+         new RegexMatches("SoruKelimesi6", Pattern.compile(".*((\\s+[nN]+[eE]+[dD]+[iİ]*[rR]+)).*")),
+         new RegexMatches("SoruKelimesi7", Pattern.compile(".*((\\s+[kK]+[iİıI]+[mM]+\\s?)([^bi|Bİ| bi| Bİ])).*")),
+         new RegexMatches("SoruKelimesi8", Pattern.compile(".*((\\s+[nN]+[eE]+[yY]+)).*")),
+         new RegexMatches("SoruKelimesi9", Pattern.compile(".*((\\s+[nN]+[aA]+[sS]+[iİıI]+[lL]+)).*")),
+         new RegexMatches("SoruKelimesi10", Pattern.compile(".*((\\s+[nN]+[eE]+[dD]+[eE]+[nN]+)).*")),
+         new RegexMatches("SoruKelimesi11", Pattern.compile(".*((\\s+[nN]+[oO]+[lL]+[mM]+[uU]+[şŞsS]+)).*")),
+         new RegexMatches("SoruKelimesi12", Pattern.compile(".*((\\s+[nN]+[oO]+[lL]+[dD]+[uU]+)).*")),
+         new RegexMatches("SoruKelimesi13", Pattern.compile(".*((\\s+[nN]+[eE]+[sS]+[iİıI]+[nN]+)).*")),
+         new RegexMatches("SoruKelimesi14", Pattern.compile(".*((\\s+[nN]+[aA]+[pPbB]+[iİıI]*[yY]+[oO]*)).*")),
+         new RegexMatches("SoruKelimesi15", Pattern.compile(".*((\\s+[nN]+[iİıI]+[çÇcC]+[iİıI]+[nN])(\\?|\\.|!|:|\\s)+).*")),
+         new RegexMatches("SoruKelimesi16", Pattern.compile(".*((\\s+[nN]+[aA]+[bB]+[eE]*[rR]+)).*")),
+         new RegexMatches("SoruKelimesi17", Pattern.compile(".*((\\,|\\.|!|:|\\s)+)([nN]+[eE]+)(\\s+).*")),
+         new RegexMatches("SoruKelimesi18", Pattern.compile(".*((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([oO]+[lL]+[dD]+[uU]+)|([dD]+[iİıI]+[yY]+[oOeE]+)|([bB]+[uU]+)).*")),
+         new RegexMatches("SoruKelimesi19", Pattern.compile(".*((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([zZ]+[aA]+[mM]+[aA]+[nN]+)|([iİıI]+[şŞ]+)|([kK]+[aA]+[lL]+[iİıI]+[rR]+)|([dD]+[eE]+)).*")),
+         new RegexMatches("SoruKelimesi20", Pattern.compile(".*((\\,|\\.|!|:|\\s|([bB]+[uU]+\\s?))+)([nN]+[eE]+)(([iİıI]+[cCçÇ]+[iİıI]+[nN]+)|([pP]+[eE]+[kK]+[iİıI]+)|([lL]+[aA]+)).*")),
+         new RegexMatches("SoruKelimesi21", Pattern.compile(".*((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([aA]+[lL]+[aA]+[kK]+[aA]+)|([aA]+[yY]+[aA]+[kK]+)|([kK]+[aA]+[dD]+[aA]+[rR]+)).*")),
+         new RegexMatches("SoruKelimesi22", Pattern.compile(".*((\\,|\\.|!|:|\\s)+)([nN]+[eE]+\\s?)(([aA]+[rR]+[aA]+)|([Ll][İiIı]+)|([Cc][İiIı]+)|([sS][İiIı]+)).*")),
+         new RegexMatches("SoruKelimesi23", Pattern.compile(".*((\\s+[nN]+[eE]+)(\\?|\\.|!|:)).*")),
+         new RegexMatches("SoruKelimesi24", Pattern.compile(".*((\\s+[nN]+[eE]+)$).*")),
+         new RegexMatches("SoruKelimesi25", Pattern.compile(".*((\\s+[nN]+[eE]+\\s+[^ yazik| yazık| YAZIK| YAZİK])).*")),
+         new RegexMatches("SoruKelimesi26", Pattern.compile(".*(([nN]+[aA]*[pPbB]+[tTdD]+[iİıI]+)).*")),
+        
          new RegexMatches("OzelKelime1", Pattern.compile("(([aA]+[cC]+[aA]+[bB]+[aA]+))")),
          new RegexMatches("OzelKelime2", Pattern.compile("(((\\,|\\.|!|:|\\s)+)([dD]+[iİeE]+[mM]+[iİ]+)((\\,|\\.|!|:|\\s)+))")),
          new RegexMatches("OzelKelime3", Pattern.compile("(([sS]+[eE]+[nN]+[cC]+[eE]+))")),
@@ -77,43 +93,75 @@ public class InfoFeatureFactory extends CompositeFeatureFactory {
          new RegexMatches("OzelKelime7", Pattern.compile("((\\s+[eE]+\\s+))")),
 
 
-//                new TokenSequenceLowercase(),
+//new TokenSequenceLowercase(),
+
 //                new TokenText("WORD="),
+
 //
 //                new TokenTextCharSuffix("SUFFIX2=",2),
+
 //                new TokenTextCharSuffix("SUFFIX3=",3),
+
 //                new TokenTextCharSuffix("SUFFIX4=",4),
+
 //                new TokenTextCharPrefix("PREFIX2=",2),
+
 //                new TokenTextCharPrefix("PREFIX3=",3),
+
 //                new TokenTextCharPrefix("PREFIX4=",4),
+
 //                new TokenTextCharNGrams("CHARNGRAM=", new int[] {2,3,4}),
 
+
                   /* FeatureInWindow features. */
+
                 //Burayı duşun
-                /*
+                
+/*
                 new FeaturesInWindow("WINDOW=",-5,5,
+
                 Pattern.compile("WORD=.*|SUFFIX.*|PREFIX.*|DC=.*|WC=.*|BWC=.*|[A-Z]+"),true), */
-                new FeaturesInWindow("WINDOW=",-5,5,
-                        Pattern.compile("WORD=.*|SUFFIX.*|PREFIX.*|DC=.*|WC=.*|BWC=.*"),true),
+
+           //     new FeaturesInWindow("WINDOW=",-5,5,
+
+             //           Pattern.compile("WORD=.*|SUFFIX.*|PREFIX.*|DC=.*|WC=.*|BWC=.*"),true),
+
 
         /*
         int[][] conjunctions = new int[2][];
+
         conjunctions[0] = new int[] { -2,-1 };
+
         conjunctions[1] = new int[] { 1, 2};     */
+
                 new OffsetConjunctions(true,Pattern.compile("WORD=.*"),
-                        new int[][]{{-1},{1},{-1,0}})
+
+                        new int[][]{{-1},{1},{-1,0}}),
+
 
                //Inputları ve targetları yazdırıyor.
-                //new PrintInputAndTarget()
-               // new PrintTokenSequenceFeatures()
+
+               new PrintInputAndTarget()
+
+                //new PrintTokenSequenceFeatures()
+
         });
 
-    }
-    @Override
-    public Pipe getPipe() {
-
-       //return getPipe(new SimpleTagger.SimpleTaggerSentence2FeatureVectorSequence());
-        return getPipe(new TokenSequence2FeatureVectorSequence());
-
-    }
+    
 }
+    
+@Override
+
+    public Pipe getPipe() 
+{
+
+       
+//return getPipe(new SimpleTagger.SimpleTaggerSentence2FeatureVectorSequence());
+ 
+       return getPipe(new TokenSequence2FeatureVectorSequence());
+
+    
+}
+
+}
+
